@@ -1,13 +1,61 @@
-services:
-  db:
-    image: postgres:17
-    environment:
-      POSTGRES_USER: firstdotnet
-      POSTGRES_PASSWORD: myapp_pw
-      POSTGRES_DB: firsatdotnet_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+﻿services:
+    db:
+        image: postgres:17
+        restart: unless-stopped
+        shm_size: 256mb
+        environment:
+            POSTGRES_USER: ${DB_USER}
+            POSTGRES_PASSWORD: ${DB_PASSWORD}
+            POSTGRES_DB: ${DB_NAME}
+        ports:
+            - ${HOST_DB_PORT:-5432}:5432
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
+
+    api:
+        build:
+            context: .
+            dockerfile: server/Dockerfile
+        restart: unless-stopped
+        environment:
+            - ASPNETCORE_URLS=http://0.0.0.0:${BACKEND_PORT}
+            - ConnectionString=Host=${DB_HOST},Port=${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};Include Error Detail=true
+            - ASPNETCORE_ENVIRONMENT=${ASPENVIRONMENT:-Development}
+        ports:
+            - ${HOST_BACKEND_PORT:-5080}:${BACKEND_PORT}
+        depends_on:
+            db:
+                condition: service_healthy
+        working_dir: /app
+        volumes:
+            - ${APP_DIR:-.}/server:/src:ro
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:8080/api/products"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
+ 
+
+    frontend:
+        build:
+            context: .
+            dockerfile: client/Dockerfile
+        restart: unless-stopped
+        environment:
+            - NODE_ENV=${NODE_ENV}
+            - VITE_API_URL=${VITE_API_URL}
+        ports:
+            - ${FRONTEND_PORT:-5173}:${FRONTEND_PORT}
+        stdin_open: true
+        tty: true
+
 volumes:
-  pgdata:
+    pgdata:
+
