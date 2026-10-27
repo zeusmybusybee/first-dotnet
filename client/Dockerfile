@@ -1,13 +1,13 @@
-# Stage 1: build the static files
-FROM node:lts-alpine AS build
+﻿FROM node:20-bookworm-slim AS build
 WORKDIR /app
-COPY package*.json .
-RUN npm ci
-COPY . .
+COPY client/package.json client/package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY client/ ./
 RUN npm run build
 
-# Stage 2: serve them with nginx
-FROM nginx:alpine
+FROM nginx:1.27-alpine
 COPY --from=build /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+RUN rm -rf /etc/nginx/conf.d/default.conf
+COPY client/nginx.conf /etc/nginx/conf.d/
+EXPOSE 5173
+CMD ["nginx", "-g", "daemon off;"]
