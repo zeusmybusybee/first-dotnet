@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  /* Fonts */
+  --font-sans: "Geist", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  /* Colors: each one becomes bg-*, text-*, border-* classes */
+  --color-page: #fafafa;
+  --color-surface: #ffffff;
+  --color-ink: #18181b;
+  --color-muted: #52525b;
+  --color-line: #e4e4e7;
+  --color-accent: #047857;
+  --color-accent-hover: #065f46;
+  --color-danger: #b91c1c;
+
+  /* Radii: become rounded-field, rounded-card */
+  --radius-field: 10px;
+  --radius-card: 16px;
+}
+
+@layer base {
+  body {
+    @apply bg-page text-ink font-sans antialiased;
+  }
+}
