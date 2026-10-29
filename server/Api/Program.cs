@@ -1,4 +1,5 @@
 using Api.Data;
+using Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddCors(opt =>
     opt.AddPolicy("client", p => p
         .WithOrigins("http://localhost:5173")
@@ -19,7 +21,11 @@ builder.Services.AddCors(opt =>
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
-    app.MapOpenApi();
+{
+    app.MapOpenApi();                              // JSON description at /openapi/v1.json
+    app.UseSwaggerUI(o =>                          // clickable test page at /swagger
+        o.SwaggerEndpoint("/openapi/v1.json", "Api v1"));
+}
 
 app.UseCors("client");
 app.MapControllers();

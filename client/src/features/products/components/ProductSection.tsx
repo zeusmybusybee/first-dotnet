@@ -1,9 +1,15 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Container } from '@/components/layout/Container'
 import { Field } from '@/components/ui/Field'
 import { Input } from '@/components/ui/Input'
+// import { Button } from '@mantine/core';
+import { AppSpotlight, spotlight } from '@/components/ui/Appspotlight';
+import { PackageIcon } from '@phosphor-icons/react';
+// import { Appspotlight, spotlight } from './components/ui/Spotlight';
 import { ProductCard } from './ProductCard'
 import type { Product } from '../types'
+import type { SpotlightActionData } from '@mantine/spotlight'
+
 
 type Props = {
   products: Product[]
@@ -16,21 +22,39 @@ export function ProductSection({ products, loading, error, onDelete }: Props) {
   const [query, setQuery] = useState('')
   const visible = products.filter((p) => p.name.toLowerCase().includes(query.toLowerCase()))
 
+  // const actions: SpotlightActionData[] = [
+  //   { id: 'home', label: 'Home', description: 'Homepage redirections', onClick: () => console.log('Home'), leftSection: <HouseIcon size={24} /> },
+  //   { id: 'products-list', label: 'Products List', description: 'List of Products', onClick: () => console.log('Product-List'), leftSection: <GaugeIcon  size={24} /> },
+  // ];
+  const actions: SpotlightActionData[] = useMemo(
+    () =>
+      products.map((p) =>({
+        id: `product-${p.id}`,
+        label: p.name,
+        onClick: () => setQuery(p.name), //filter the grid products
+        leftSection: <PackageIcon size={24} />,
+      })),
+      [products] 
+
+  )
+
   return (
     <Container id="products" className="flex flex-col gap-6 pt-2 pb-18">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h2 className="text-[28px] font-bold tracking-tight">Products</h2>
         <div className="w-full max-w-[280px]">
-          <Field label="Search" htmlFor="search">
+          <Field  label="Search" htmlFor="search">
             <Input
+            onClick={spotlight.open}
               id="search"
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Filter by name"
+              placeholder="Search Products"
               className="h-10 text-sm"
             />
           </Field>
+          <AppSpotlight actions={actions} />
         </div>
       </div>
 
