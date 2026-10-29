@@ -51,6 +51,9 @@ jobs:
           node-version: 'lts/*'
           cache: 'npm'
           cache-dependency-path: client/package-lock.json
+          
+      - name: Check formatting
+        run: npm run format:check
 
       - name: Install packages
         run: npm ci            # like npm install, but exact versions from the lock file
