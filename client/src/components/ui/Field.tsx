@@ -9,7 +9,7 @@ export function Field({ label, htmlFor, hint, children }: Props) {
         {label}
       </label>
       {children}
-      {hint && <span className="text-[13px] text-muted">{hint}</span>}
+      {hint && <span className="text-[13px] text-muted-foreground">{hint}</span>}
     </div>
   )
 }

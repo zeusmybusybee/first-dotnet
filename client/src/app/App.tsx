@@ -1,6 +1,7 @@
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { Hero } from '@/features/products/components/Hero'
+import { CoverFlowSection } from '@/features/products/components/CoverflowSection'
 import { ProductSection } from '@/features/products/components/ProductSection'
 import { useProducts } from '@/features/products/useProducts'
 
@@ -12,6 +13,7 @@ export default function App() {
       <Header />
       <main>
         <Hero onAdd={add} />
+        <CoverFlowSection/>
         <ProductSection products={products} loading={loading} error={error} onDelete={remove} />
       </main>
       <Footer />

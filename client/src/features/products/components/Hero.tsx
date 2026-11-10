@@ -11,7 +11,7 @@ export function Hero({ onAdd }: Props) {
         <h1 className="text-5xl leading-[1.08] font-bold tracking-tight">
           Your product catalog, in one place.
         </h1>
-        <p className="max-w-[46ch] text-lg leading-relaxed text-muted">
+        <p className="max-w-[46ch] text-lg leading-relaxed text-muted-foreground">
           Add, edit and remove products. Everything saves straight to your PostgreSQL database.
         </p>
         <a

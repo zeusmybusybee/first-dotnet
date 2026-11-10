@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+/* dark: classes only apply inside a .dark parent (this site is light-only) */
+@custom-variant dark (&:is(.dark *));
 
 @theme {
   /* Fonts */
@@ -9,11 +13,26 @@
   --color-page: #fafafa;
   --color-surface: #ffffff;
   --color-ink: #18181b;
-  --color-muted: #52525b;
   --color-line: #e4e4e7;
   --color-accent: #047857;
   --color-accent-hover: #065f46;
   --color-danger: #b91c1c;
+
+  /* shadcn color names, mapped to the same palette */
+  --color-background: #ffffff;
+  --color-foreground: #18181b;
+  --color-muted: #f4f4f5;              /* light grey background */
+  --color-muted-foreground: #52525b;   /* grey text */
+  --color-popover: #ffffff;
+  --color-popover-foreground: #18181b;
+  --color-primary: #18181b;
+  --color-primary-foreground: #fafafa;
+  --color-secondary: #f4f4f5;
+  --color-secondary-foreground: #18181b;
+  --color-destructive: #b91c1c;
+  --color-border: #e4e4e7;
+  --color-input: #a1a1aa;
+  --color-ring: #047857;
 
   /* Radii: become rounded-field, rounded-card */
   --radius-field: 10px;
