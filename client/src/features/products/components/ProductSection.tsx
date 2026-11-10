@@ -58,10 +58,10 @@ export function ProductSection({ products, loading, error, onDelete }: Props) {
         </div>
       </div>
 
-      {loading && <p className="text-muted">Loading products…</p>}
+      {loading && <p className="text-muted-foreground">Loading products…</p>}
       {error && <p className="text-danger">Could not load products. Is the API running?</p>}
       {!loading && !error && visible.length === 0 && (
-        <p className="text-muted">No products yet. Add your first one above.</p>
+        <p className="text-muted-foreground">No products yet. Add your first one above.</p>
       )}
 
       <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-4">
