@@ -1,4 +1,4 @@
-﻿services:
+services:
     db:
         image: postgres:17
         restart: unless-stopped
@@ -25,7 +25,7 @@
         restart: unless-stopped
         environment:
             - ASPNETCORE_URLS=http://0.0.0.0:${BACKEND_PORT}
-            - ConnectionString=Host=${DB_HOST},Port=${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};Include Error Detail=true
+            - ConnectionStrings__Default=Host=${DB_HOST};Port=${DB_PORT};Database=${DB_NAME};User Id=${DB_USER};Password=${DB_PASSWORD};Include Error Detail=true
             - ASPNETCORE_ENVIRONMENT=${ASPENVIRONMENT:-Development}
         ports:
             - ${HOST_BACKEND_PORT:-5080}:${BACKEND_PORT}

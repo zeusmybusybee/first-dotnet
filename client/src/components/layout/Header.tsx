@@ -8,7 +8,7 @@ export function Header() {
           <span className="grid size-8 place-items-center rounded-field bg-accent font-bold text-white">
             S
           </span>
-          Shelf
+          Shelf Taguan
         </a>
         <nav aria-label="Main" className="flex gap-6 font-medium text-zinc-700">
           <a href="#products" className="hover:text-ink">
@@ -17,8 +17,11 @@ export function Header() {
           <a href="#add" className="hover:text-ink">
             Add product
           </a>
+          <a href="#list" className="hover:text-ink">
+            List of Products
+          </a>
         </nav>
       </Container>
     </header>
   )
-}
+} 

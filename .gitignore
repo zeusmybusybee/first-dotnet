@@ -1,7 +1,12 @@
-﻿node_modules/
+node_modules/
 dist/
 .env
-server/bin/
-server/obj/
 client/node_modules/
 client/dist/
+
+# .NET build output (any folder)
+bin/
+obj/
+
+# local cleanup folders
+_to_delete/

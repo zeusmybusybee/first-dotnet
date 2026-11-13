@@ -1,65 +1,65 @@
-# name: CI
+name: CI
 
-# # WHEN: run on pushes to develop and on any pull request into main
-# on:
-#   push:
-#     branches: [develop]
-#   pull_request:
-#     branches: [main]
+# WHEN: run on pushes to develop and on any pull request into main
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [main]
 
-# jobs:
-#   # ---------- JOB 1: .NET API ----------
-#   backend:
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         working-directory: server/Api   # every "run:" step executes here
+jobs:
+  # ---------- JOB 1: .NET API ----------
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server/Api   # every "run:" step executes here
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-#       - name: Install .NET
-#         uses: actions/setup-dotnet@v5
-#         with:
-#           dotnet-version: '10.0.x'
+      - name: Install .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
 
-#       - name: Restore packages
-#         run: dotnet restore
+      - name: Restore packages
+        run: dotnet restore
 
-#       - name: Build
-#         run: dotnet build --no-restore --configuration Release
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
 
-#       # Uncomment once you add a test project
-#       # - name: Test
-#       #   run: dotnet test --no-build --configuration Release
+      # Uncomment once you add a test project
+      # - name: Test
+      #   run: dotnet test --no-build --configuration Release
 
-#   # ---------- JOB 2: React client ----------
-#   frontend:
-#     runs-on: ubuntu-latest
-#     defaults:
-#       run:
-#         working-directory: client
+  # ---------- JOB 2: React client ----------
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
 
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-#       - name: Install Node
-#         uses: actions/setup-node@v5
-#         with:
-#           node-version: 'lts/*'
-#           cache: 'npm'
-#           cache-dependency-path: client/package-lock.json
+      - name: Install Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+          
+      - name: Check formatting
+        run: npm run format:check
 
-#       - name: Check formatting
-#          run: npm run format:check
+      - name: Install packages
+        run: npm ci            # like npm install, but exact versions from the lock file
 
-#       - name: Install packages
-#         run: npm ci            # like npm install, but exact versions from the lock file
+      - name: Lint
+        run: npm run lint
 
-#       - name: Lint
-#         run: npm run lint
-
-#       - name: Build
-#         run: npm run build     # also type-checks TypeScript
+      - name: Build
+        run: npm run build     # also type-checks TypeScript
