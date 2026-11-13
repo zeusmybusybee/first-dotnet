@@ -1,11 +1,18 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Api.Dtos;
 
-public class CreateBookingDto
+public class BookingDto
 {
+    [Required, MaxLength(200)]
     public string Name { get; set; } = string.Empty;
-}
 
-public class UpdateBookingDto
-{
-    public string Name { get; set; } = string.Empty;
+    [Required, EmailAddress, MaxLength(320)]
+    public string Email { get; set; } = string.Empty;
+
+    [Required]
+    public DateOnly BookingDate { get; set; }
+
+    [Required]
+    public TimeOnly BookingTime { get; set; }
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Api.Controllers;
 
 [ApiController]
-[Route("api/controller")]
+[Route("api/[controller]")]
 public class BookingsController : ControllerBase
 {
     private readonly AppDbContext _db;
@@ -35,13 +35,24 @@ public class BookingsController : ControllerBase
         return booking;
     }
 
-    // POST api/booking
+    // POST api/bookings
     [HttpPost]
-    public async Task<ActionResult<Booking>> Create(CreateBookingDto dto)
+    public async Task<ActionResult<Booking>> Create(BookingDto dto)
     {
+        if (dto.BookingDate < DateOnly.FromDateTime(DateTime.UtcNow))
+            return BadRequest("Booking date cannot be in the past.");
+
+        var taken = await _db.Bookings.AnyAsync(b => 
+            b.BookingDate == dto.BookingDate && b.BookingTime == dto.BookingTime);
+        if (taken)
+            return Conflict("That time slot is already booked.");
+
         var booking = new Booking
         {
-            Name = dto.Name
+            Name = dto.Name,
+            Email = dto.Email,
+            BookingDate = dto.BookingDate,
+            BookingTime = dto.BookingTime
             //createdat is set by the model default utcnow
         };
 
@@ -53,12 +64,22 @@ public class BookingsController : ControllerBase
 
     // PUT api/bookings
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id, UpdateBookingDto dto)
+    public async Task<IActionResult> Update(int id, BookingDto dto)
     {
         var booking = await _db.Bookings.FindAsync(id);
         if (booking is null) return NotFound();
+
+        var taken = await _db.Bookings.AnyAsync(b => 
+            b.Id != id &&
+            b.BookingDate == dto.BookingDate && 
+            b.BookingTime == dto.BookingTime);
+        if (taken)
+            return Conflict("That time slot is already booked.");
         
         booking.Name = dto.Name;
+        booking.Email = dto.Email;
+        booking.BookingDate = dto.BookingDate;
+        booking.BookingTime = dto.BookingTime;
         booking.UpdateAt = DateTime.UtcNow;
 
         await _db.SaveChangesAsync();
