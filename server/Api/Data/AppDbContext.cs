@@ -9,14 +9,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Product> Products => Set<Product>();
     public DbSet<Category> Categories => Set<Category>();
     public DbSet<Booking> Bookings => Set<Booking>();
+    // user
+    public DbSet<User> Users => Set<User>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Booking>(entity =>
-        {
-            entity.Property(b => b.Name).IsRequired().HasMaxLength(200);
-            entity.Property(b => b.Email).IsRequired().HasMaxLength(200);
+        // keep your existing Booking config here
 
-            entity.HasIndex(b => new { b.BookingDate, b.BookingTime }).IsUnique();
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.Property(u => u.Email).IsRequired().HasMaxLength(320);
+            entity.HasIndex(u => u.Email).IsUnique();
         });
     }
 }
